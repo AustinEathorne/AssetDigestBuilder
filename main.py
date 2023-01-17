@@ -48,7 +48,7 @@ def main():
   wikiDirPath = os.path.realpath(os.path.join(parentDirPath, wikiDirName))
   print(f"Wiki Directory: {wikiDirPath}")
   toolsDirPath = os.path.realpath(os.path.join(parentDirPath, toolsDirName))
-  print(f"Tools Directory: {toolsDirPath}\n\n")
+  print(f"Tools Directory: {toolsDirPath}\n")
 
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:
@@ -76,7 +76,7 @@ def main():
 
   # search the project for png assets and build markdown files
   print("Generate Markdown Files\n")
-  generate_markdown_files()
+  generate_markdown_files(repoDirPath, wikiDirPath)
 
   # commit and push changes to the wiki repo
   if wikiRepo.is_dirty():
