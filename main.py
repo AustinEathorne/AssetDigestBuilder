@@ -1,4 +1,4 @@
-import os, git
+import os, git, textwrap
 from datetime import datetime
 from gifBuilder import generate_gifs
 from digestBuilder import generate_markdown_files
@@ -53,25 +53,21 @@ def main():
   generate_markdown_files(repoDirPath, wikiDirPath)
 
   # commit and push changes to the wiki repo
+  print('Update Wiki Repo')
   if wikiRepo.untracked_files:
-    print('Adding the following files to git:')
-    print([os.path.basename(file) for file in wikiRepo.untracked_files])
+    print('\tAdding the following files to git:')
+    print(textwrap.indent('\n'.join([os.path.basename(file) for file in wikiRepo.untracked_files]), '\t\t'))
   
   wikiRepo.git.add(".") # add all local changes
 
-  if wikiRepo.is_dirty():
-    print('Commit and push changes to the wiki repo\n')
-    
-    dirtyFiles = wikiRepo.git.diff('--name-only').split()
+  if wikiRepo.is_dirty():    
     print('\t Changes:')
-    for df in dirtyFiles:
-      print(f'\t\t {df}')
-    print('\n')
+    print(textwrap.indent('\n'.join(wikiRepo.git.diff('--name-only').split()), '\t\t'))
 
     wikiRepo.index.commit(f'Update Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
-    print("No changes found in the Wiki repository\n")
+    print("\tNo changes found in the Wiki repository\n")
 
   # display complete message
   completeTime = datetime.now()
