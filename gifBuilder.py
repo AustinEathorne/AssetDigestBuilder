@@ -25,7 +25,7 @@ def generate_gifs(srcDir, dstDir):
   # create destination directory
   make_dirs(dstDir, 1)
 
-  # traverse image directories, create gifs (Actor/SetType/Set/*.jpeg)
+  # traverse image directories, create gifs (Actor/SetType/Set/*.jpg)
   createdGifs = 0
   # actors
   for actor in os.scandir(srcDir):
@@ -56,19 +56,19 @@ def generate_gifs(srcDir, dstDir):
 
         # create gif
         make_gif(animSet.path, animSetFilePath, duration)
-        print(f"Create Gif from assets at: {animSet.path}")
 
         # print progress
         createdGifs += 1
         completion = round((createdGifs/totalGifs) * 100, 2)
-        print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})")
+        print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})\r", end="")
         
   print("Gif Generation Complete\n")
 
 def make_gif(imgSrc, gifDst, duration):
   # get all of the .jpg images in the set directory
-  frames = [Image.open(image) for image in glob.glob(f"{imgSrc}/*.JPG")]
+  frames = [Image.open(image) for image in glob.glob(f"{imgSrc}/*.jpg")]
   if len(frames) == 0:
+    print(f'\tFailed to create gif, no assets found at: {imgSrc}')
     return
 
   # create gif
@@ -76,4 +76,4 @@ def make_gif(imgSrc, gifDst, duration):
   frame_one.save(gifDst,
     format="GIF", append_images=frames, save_all=True, duration=duration, loop=0)
 
-  print(f"Created '{gifDst}'")
+  print(f"\tCreated '{gifDst}'")

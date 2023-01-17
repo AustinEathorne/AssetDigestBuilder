@@ -44,6 +44,7 @@ def main():
     exit(1)
 
   # generate gifs from animation capture images
+  #TODO: remove src dir
   generate_gifs(
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)),
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
@@ -67,7 +68,7 @@ def main():
       print(f'\t\t {df}')
     print('\n')
 
-    wikiRepo.index.commit(f'Asset Digest Update\nRebuilt the Asset Digest based on commit: {githubSha}')
+    wikiRepo.index.commit(f'Update Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
     print("No changes found in the Wiki repository\n")
