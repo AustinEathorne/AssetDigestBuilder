@@ -84,6 +84,10 @@ def main():
     wikiRepo.git.add(".") # Add all local changes
     wikiRepo.index.commit('Asset Digest Bump')
     wikiRepo.git.push()
+  elif wikiRepo.untracked_files:
+    print(f'Wiki repository has untracked files:')
+    print([os.path.basename(file) for file in wikiRepo.untracked_files])
+    print('\n')
   else:
       print("No changes found in the Wiki repository... something went wrong ^\n")
       exit(1)
