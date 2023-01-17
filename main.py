@@ -1,6 +1,4 @@
-import os
-#from github import Github
-import git
+import os, git
 from datetime import datetime
 from gifBuilder import generate_gifs
 from digestBuilder import generate_markdown_files
@@ -11,10 +9,10 @@ WIKI_DIR = "WIKI_DIR"
 GITHUB_SHA = "GITHUB_SHA" #SHA for the commit that triggered the Action (merged to master commit)
 
 # Gif Directory Paths (relative to the wiki root directory)
-# WikiRoot/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
-WIKI_GIF_SRC_DIR = os.path.realpath(os.path.join("Assets", "ImagesToConvert"))
-# WikiRoot/Assets/ActorAnimations/[ActorName]/[SetType]/[AnimSet].gif
-WIKI_GIF_DST_DIR = os.path.realpath(os.path.join("Assets", "ActorAnimations"))
+# WikiRoot/AssetDigest/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
+WIKI_GIF_SRC_DIR_NAME = "ImagesToConvert"
+# WikiRoot/AssetDigest/Assets/ActorAnimations/[ActorName]/[SetType]/[AnimSet].gif
+WIKI_GIF_DST_DIR_NAME = "ActorAnimations"
 
 
 def main():
@@ -47,8 +45,8 @@ def main():
 
   # generate gifs from animation capture images
   generate_gifs(
-    os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_SRC_DIR)),
-    os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_DST_DIR)))
+    os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)),
+    os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
 
   # search the project for png assets and build markdown files
   generate_markdown_files(repoDirPath, wikiDirPath)
