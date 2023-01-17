@@ -54,7 +54,7 @@ def main():
   toolsDirPath = os.path.realpath(os.path.join(parentDirPath, toolsDirName))
   print(f"Tools Directory: {toolsDirPath}\n")
 
-  print("Directories in Parent: \n")
+  print("Directories in Parent:")
   for directory in os.scandir(parentDirPath):
     if directory.is_dir():
       print(directory.name)

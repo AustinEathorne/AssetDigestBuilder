@@ -13,7 +13,7 @@
           "directoriesToExclude": []
         },
         {
-          "directory": "Image/Test2",
+          "directory": "Images/Test2",
           "inProject": true,
           "fileExtensions": [".png"],
           "directoryDepth": 1,
