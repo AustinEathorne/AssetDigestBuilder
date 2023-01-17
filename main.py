@@ -65,8 +65,7 @@ def main():
     wikiRepo.index.commit('-m', 'Asset Digest Bump', '-m', f'Rebuilt the Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
-      print("No changes found in the Wiki repository... something went wrong ^\n")
-      exit(1)
+    print("No changes found in the Wiki repository\n")
 
   # display complete message
   completeTime = datetime.now()
