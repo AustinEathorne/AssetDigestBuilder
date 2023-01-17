@@ -62,7 +62,7 @@ def main():
 
   if wikiRepo.is_dirty():
     print('Commit and push changes to the wiki repo\n')
-    wikiRepo.index.commit('-m', 'Asset Digest Bump', '-m', f'Rebuilt the Asset Digest based on commit: {githubSha}')
+    wikiRepo.index.commit(f'Asset Digest Update\nRebuilt the Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
     print("No changes found in the Wiki repository\n")
