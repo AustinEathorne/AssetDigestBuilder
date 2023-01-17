@@ -62,6 +62,13 @@ def main():
 
   if wikiRepo.is_dirty():
     print('Commit and push changes to the wiki repo\n')
+    
+    dirtyFiles = wikiRepo.git.diff('--name-only').split()
+    print('\t Changes:')
+    for df in dirtyFiles:
+      print(f'\t\t {df}')
+    print('\n')
+
     wikiRepo.index.commit(f'Asset Digest Update\nRebuilt the Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
