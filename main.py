@@ -37,10 +37,9 @@ def main():
     exit(1)
   if (toolsDirName := get_environment_var(TOOLS_DIR)) is None:
     exit(1)
-  if (githubWorkspace := get_environment_var(GITHUB_WORKSPACE)) is None:
-    exit(1)
-
-  print(f"Github Workspace: {githubWorkspace}")
+  #if (githubWorkspace := get_environment_var(GITHUB_WORKSPACE)) is None:
+    #exit(1)
+  #print(f"Github Workspace: {githubWorkspace}")
 
   startTime = datetime.now()
   print(f"\n[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n\n")
@@ -54,6 +53,11 @@ def main():
   print(f"Wiki Directory: {wikiDirPath}")
   toolsDirPath = os.path.realpath(os.path.join(parentDirPath, toolsDirName))
   print(f"Tools Directory: {toolsDirPath}\n")
+
+  print("Directories in Parent: \n")
+  for directory in os.scandir(parentDirPath):
+    if directory.is_dir():
+      print(directory.name)
 
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:

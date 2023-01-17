@@ -48,6 +48,7 @@ def generate_markdown_files(mainDir, wikiDir):
   # build paths to asset directories
   assetDir = os.path.realpath(os.path.join(mainDir, "Assets"))
   digestAssetDir = os.path.realpath(os.path.join(digestDir, "Assets"))
+  print(f"Asset Dir: {assetDir}\nDigestAssetDir: {digestAssetDir}\n\n")
 
   # traverse project config, write pages
   searchDatas = config['searchData']
