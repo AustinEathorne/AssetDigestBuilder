@@ -10,8 +10,9 @@ MAIN_DIR = "MAIN_DIR"
 WIKI_DIR = "WIKI_DIR"
 TOOLS_DIR = "TOOLS_DIR"
 GITHUB_TOKEN = "GITHUB_TOKEN"
-WIKI_REPO_NAME = "AustinEathorne/DigestTest.wiki"
-WIKI_REPO_WORKING_BRANCH = "master"
+GITHUB_WORKSPACE = "GITHUB_WORKSPACE"
+#WIKI_REPO_NAME = "AustinEathorne/DigestTest.wiki"
+#WIKI_REPO_WORKING_BRANCH = "master"
 
 # Gif Directory Paths (relative to the wiki root directory)
 # WikiRoot/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
@@ -36,6 +37,10 @@ def main():
     exit(1)
   if (toolsDirName := get_environment_var(TOOLS_DIR)) is None:
     exit(1)
+  if (githubWorkspace := get_environment_var(GITHUB_WORKSPACE)) is None:
+    exit(1)
+
+  print(f"Github Workspace: {githubWorkspace}")
 
   startTime = datetime.now()
   print(f"\n[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n\n")
