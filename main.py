@@ -70,7 +70,7 @@ def main():
   # display complete message
   completeTime = datetime.now()
   duration = (completeTime - startTime)
-  print(f"[{completeTime.strftime('%H:%M:%S')}] Digest Builder Complete | Duration: {duration}\n")
+  print(f"[{completeTime.strftime('%H:%M:%S')}] Digest Builder Complete | Duration: {duration}")
 
 def get_environment_var(varName):
   var = os.environ.get(varName)

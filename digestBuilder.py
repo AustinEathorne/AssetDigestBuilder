@@ -48,7 +48,6 @@ def generate_markdown_files(mainDir, wikiDir):
   # build paths to asset directories
   assetDir = os.path.realpath(os.path.join(mainDir, "Assets"))
   digestAssetDir = os.path.realpath(os.path.join(digestDir, "Assets"))
-  print(f"Asset Dir: {assetDir}\nDigestAssetDir: {digestAssetDir}\n")
 
   # traverse project config, write pages
   searchDatas = config['searchData']
@@ -65,7 +64,7 @@ def generate_markdown_files(mainDir, wikiDir):
 def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideBarMd, mainDir, assetDir, digestDir, digestAssetDir, digestSearchDir):
   # get search data's name
   searchName = searchData['name']
-  print(f'Process search data: {searchName}')
+  print(f'\tProcess search data: {searchName}')
 
   # add heading to home page for search data
   tocMd.write(searchDataHeadingDepth*"#" + " " + searchName + "\n")
@@ -87,7 +86,7 @@ def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideB
     dirsToExclude = pageData['directoriesToExclude']
 
     if not os.path.exists(dirPath):
-      print(f"Failed to find directory: {dirPath}")
+      print(f"\t\tFailed to find directory: {dirPath}")
       continue
 
     # write page md and add a link to it in the ToC
@@ -110,7 +109,7 @@ def write_page(dirPath, fileExts, dirDepth, dirsToExclude, inProject, tocUrl, ma
   # create markdown file
   pagePath = os.path.realpath(os.path.join(digestSearchDir, pageName + '.md'))
   pageMd = open(pagePath, "w")
-  print(f'Write page: {pageName} | path: {pagePath}')
+  print(f'\t\tWrite page: {pageName} | path: {pagePath}')
 
   # write page content
   pageMd.write(f"[Back to Table of Contents]({tocUrl})\n\n")
@@ -167,7 +166,7 @@ def get_page_assets(dirPath, fileExts):
 
   # check if path exists
   if not os.path.exists(dirPath):
-    print (f"Failed to find directory: '{dirPath}'")
+    print (f"\t\tFailed to find directory: '{dirPath}'")
     return assets
 
   # gather items of the specified file type in the directory
@@ -182,7 +181,7 @@ def get_page_assets(dirPath, fileExts):
     assets[ext].sort(key=lambda assetPath: pathlib.Path(assetPath[1]).stem, reverse=False)
     assetCount += len(assets[ext])
 
-  print(f'Found {assetCount} in {dirPath}')
+  print(f'\t\t\tFound {assetCount} assets in {dirPath}')
 
   return assets
 
@@ -194,7 +193,7 @@ def write_page_assets(assets, inProject, pageMd, mainDir, digestDir):
       case ".gif":
         write_images(key, assets[key], inProject, pageMd, mainDir, digestDir)
       case _:
-        print(f"Logic for \"{key}\" files is not implemented\n")
+        print(f"\t\tLogic for \"{key}\" files is not implemented\n")
 
 def write_images(ext, assets, inProject, pageMd, mainDir, digestDir):
   # write table header
