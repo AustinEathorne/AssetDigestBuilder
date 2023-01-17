@@ -6,7 +6,7 @@ def make_dirs(path, tabIndentation = 0):
 
   if not os.path.exists(path):
     os.makedirs(path)
-    print(f"{'\t' * tabIndentation}Created directory at: {path}")
+    print(f"{'    ' * tabIndentation}Created directory at: {path}")
 
 def human_readable_dir_size(path, decimalPlaces = 2):
   return human_readable_size(dir_size(path), decimalPlaces)
