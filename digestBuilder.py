@@ -83,6 +83,10 @@ def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideB
     dirDepth = pageData['directoryDepth']
     dirsToExclude = pageData['directoriesToExclude']
 
+    if not os.path.exists(dirPath):
+      print(f"Failed to find directory: {dirPath}")
+      continue
+
     # write page md and add a link to it in the ToC
     page = write_page(dirPath, fileExts, dirDepth, dirsToExclude, inProject, tocUrl, mainDir, digestDir, digestSearchDir)
     tocMd.write(f"- [{page[0]}]({page[1]})\n")
