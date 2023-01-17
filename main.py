@@ -79,15 +79,16 @@ def main():
   generate_markdown_files(repoDirPath, wikiDirPath)
 
   # commit and push changes to the wiki repo
-  if wikiRepo.is_dirty():
-    print('Commit and Push Wiki Changes\n')
-    wikiRepo.git.add(".") # Add all local changes
-    wikiRepo.index.commit('Asset Digest Bump')
-    wikiRepo.git.push()
-  elif wikiRepo.untracked_files:
-    print(f'Wiki repository has untracked files:')
+  if wikiRepo.untracked_files:
+    print('Adding the following files to git:')
     print([os.path.basename(file) for file in wikiRepo.untracked_files])
     print('\n')
+    wikiRepo.git.add(".") # add all local changes
+
+  if wikiRepo.is_dirty():
+    print('Commit and Push Wiki Changes\n')
+    wikiRepo.index.commit('Asset Digest Bump')
+    wikiRepo.git.push()
   else:
       print("No changes found in the Wiki repository... something went wrong ^\n")
       exit(1)
