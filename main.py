@@ -41,7 +41,7 @@ def main():
   print(f"\n[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n\n")
 
   # build directory paths
-  parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..'))
+  parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
   print(f"Parent Directory: {parentDirPath}")
   repoDirPath = os.path.realpath(os.path.join(parentDirPath, mainDirName))
   print(f"Repo Directory: {repoDirPath}")
