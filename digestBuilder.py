@@ -119,7 +119,7 @@ def write_page(dirPath, fileExts, dirDepth, dirsToExclude, inProject, tocUrl, ma
 
     for directory in os.scandir(dirPath):
       if directory.is_dir() and directory.name not in dirsToExclude:
-        write_page_section(dirPath, directory, fileExts, dirDepth, dirsToExclude, inProject, pageMd, 1)
+        write_page_section(dirPath, directory, fileExts, dirDepth, dirsToExclude, inProject, pageMd, 1, mainDir, digestDir)
 
   # close file, return page details for the table of contents
   pageMd.close()
