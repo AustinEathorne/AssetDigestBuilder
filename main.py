@@ -57,8 +57,8 @@ def main():
   if wikiRepo.untracked_files:
     print('Adding the following files to git:')
     print([os.path.basename(file) for file in wikiRepo.untracked_files])
-    print('\n')
-    wikiRepo.git.add(".") # add all local changes
+  
+  wikiRepo.git.add(".") # add all local changes
 
   if wikiRepo.is_dirty():
     print('Commit and push changes to the wiki repo\n')
