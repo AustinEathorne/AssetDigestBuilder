@@ -1,0 +1,47 @@
+{
+  "searchData":
+  [
+    {
+      "name": "World",
+      "pageData": 
+      [
+        {
+          "directory": "Images/Test/",
+          "inProject": true,
+          "fileExtensions": [".png"],
+          "directoryDepth": 0,
+          "directoriesToExclude": []
+        },
+        {
+          "directory": "Image/Test2/",
+          "inProject": true,
+          "fileExtensions": [".png"],
+          "directoryDepth": 1,
+          "directoriesToExclude": []
+        }
+      ],
+      "searchData": []
+    },
+    {
+      "name": "Actor Animations",
+      "pageData": 
+      [
+        {
+          "directory": "ActorAnimations/Test",
+          "inProject": false,
+          "fileExtensions": [".gif"],
+          "directoryDepth": 1,
+          "directoriesToExclude": []
+        },
+        {
+          "directory": "ActorAnimations/Test2",
+          "inProject": false,
+          "fileExtensions": [".gif"],
+          "directoryDepth": 1,
+          "directoriesToExclude": []
+        }
+      ],
+      "searchData": []
+    }
+  ]
+}
