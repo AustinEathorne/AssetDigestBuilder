@@ -66,7 +66,7 @@ def generate_gifs(srcDir, dstDir):
 
 def make_gif(imgSrc, gifDst, duration):
   # get all of the .jpg images in the set directory
-  frames = [Image.open(image) for image in glob.glob(f"{imgSrc}/*.jpg")]
+  frames = [Image.open(image) for image in sorted(glob.glob(f"{imgSrc}/*.jpg"))]
   if len(frames) == 0:
     print(f'\tFailed to create gif, no assets found at: {imgSrc}')
     return
