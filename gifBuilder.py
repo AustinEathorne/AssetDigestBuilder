@@ -23,8 +23,7 @@ def generate_gifs(srcDir, dstDir):
           totalGifs += 1
 
   # create destination directory
-  print(f"Output directory: {dstDir}")
-  make_dirs(dstDir)
+  make_dirs(dstDir, 1)
 
   # traverse image directories, create gifs (Actor/SetType/Set/*.jpeg)
   createdGifs = 0
@@ -53,7 +52,7 @@ def generate_gifs(srcDir, dstDir):
         animSetFilePath = os.path.realpath(os.path.join(setTypeDirPath, f"{animSetName}.gif"))
 
         # create output directory
-        make_dirs(setTypeDirPath)
+        make_dirs(setTypeDirPath, 1)
 
         # create gif
         make_gif(animSet.path, animSetFilePath, duration)

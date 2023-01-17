@@ -25,7 +25,7 @@ def generate_markdown_files(mainDir, wikiDir):
 
   # create 'AssetDigest' folder in the wiki repo if necessary
   digestDir = os.path.realpath(os.path.join(wikiDir, "AssetDigest"))
-  make_dirs(digestDir)
+  make_dirs(digestDir, 1)
 
   # delete all existing md folders, don't want old files to persist if their associated folder/file in the project has changed names
   for file in os.scandir(digestDir):
@@ -72,7 +72,7 @@ def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideB
 
   # create a directory for the search data
   digestSearchDir = os.path.join(digestSearchDir, searchName)
-  make_dirs(digestSearchDir)
+  make_dirs(digestSearchDir, 3)
 
   # process page data, sort directories alphabetically
   pageDatas = searchData['pageData']
