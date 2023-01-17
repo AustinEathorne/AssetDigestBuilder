@@ -11,8 +11,6 @@ WIKI_DIR = "WIKI_DIR"
 TOOLS_DIR = "TOOLS_DIR"
 GITHUB_TOKEN = "GITHUB_TOKEN"
 GITHUB_WORKSPACE = "GITHUB_WORKSPACE"
-#WIKI_REPO_NAME = "AustinEathorne/DigestTest.wiki"
-#WIKI_REPO_WORKING_BRANCH = "master"
 
 # Gif Directory Paths (relative to the wiki root directory)
 # WikiRoot/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
@@ -20,12 +18,6 @@ WIKI_GIF_SRC_DIR = os.path.realpath(os.path.join("Assets", "ImagesToConvert"))
 # WikiRoot/Assets/ActorAnimations/[ActorName]/[SetType]/[AnimSet].gif
 WIKI_GIF_OUT_DIR = os.path.realpath(os.path.join("Assets", "ActorAnimations"))
 
-#PROJ_ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..',))
-#PROJ_CONFIG_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), 'config', 'config.json'))
-#PROJ_ASSETS_DIR = os.path.realpath(os.path.join(PROJ_ROOT_DIR, 'Assets'))
-#WIKI_REPO_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'solitaire-story.wiki'))
-#WIKI_REPO_DIGEST_DIR = os.path.realpath(os.path.join(WIKI_REPO_DIR, 'AssetDigest'))
-#WIKI_REPO_ASSETS_DIR = os.path.realpath(os.path.join(WIKI_REPO_DIGEST_DIR, 'Assets'))
 
 def main():
   #print("Run Asset Digest Builder")
@@ -54,21 +46,21 @@ def main():
   toolsDirPath = os.path.realpath(os.path.join(parentDirPath, toolsDirName))
   print(f"Tools Directory: {toolsDirPath}\n")
 
-  print("Directories in Parent:")
-  for directory in os.scandir(parentDirPath):
-    if directory.is_dir():
-      print(directory.name)
-  print('\n')
+  #print("Directories in Parent:")
+  #for directory in os.scandir(parentDirPath):
+  #  if directory.is_dir():
+  #    print(directory.name)
+  #print('\n')
 
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:
-    print('Failed to find wiki repository.')
+    print('Failed to find wiki repository.\n')
     exit(1)
 
   # get the wiki repository
   wikiRepo = git.Repo(wikiDirPath)
   if wikiRepo is None:
-    print(f'Failed to retrieve the wiki repository at {wikiDirPath}')
+    print(f'Failed to retrieve the wiki repository at {wikiDirPath}\n')
     exit(1)
 
   # create instance of Github class
@@ -84,17 +76,16 @@ def main():
   generate_gifs(gifSrcDir, gifOutDir)
 
   # search the project for png assets and build markdown files
-  print("Generate Markdown Files\n")
   generate_markdown_files(repoDirPath, wikiDirPath)
 
   # commit and push changes to the wiki repo
   if wikiRepo.is_dirty():
-    print("Commit and Push Wiki Changes\n")
+    print('Commit and Push Wiki Changes\n')
     wikiRepo.git.add(".") # Add all local changes
-    wikiRepo.index.commit(f'Asset Digest Bump')
+    wikiRepo.index.commit('Asset Digest Bump')
     wikiRepo.git.push()
   else:
-      print("No changes found in the Wiki repository... something went wrong ^")
+      print("No changes found in the Wiki repository... something went wrong ^\n")
       exit(1)
 
   # display complete message

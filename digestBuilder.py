@@ -17,7 +17,7 @@ ASSET_DISPLAY_SIZE_PERCENTAGE = 100
 
 
 def generate_markdown_files(mainDir, wikiDir):
-  print("Generating Markdown Files\n")
+  print("Generating Markdown Files")
 
   # load the config file
   with open(CONFIG_DIR, 'r') as f:
@@ -48,7 +48,7 @@ def generate_markdown_files(mainDir, wikiDir):
   # build paths to asset directories
   assetDir = os.path.realpath(os.path.join(mainDir, "Assets"))
   digestAssetDir = os.path.realpath(os.path.join(digestDir, "Assets"))
-  print(f"Asset Dir: {assetDir}\nDigestAssetDir: {digestAssetDir}\n\n")
+  print(f"Asset Dir: {assetDir}\nDigestAssetDir: {digestAssetDir}\n")
 
   # traverse project config, write pages
   searchDatas = config['searchData']
@@ -63,6 +63,7 @@ def generate_markdown_files(mainDir, wikiDir):
 def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideBarMd, mainDir, assetDir, digestDir, digestAssetDir, digestSearchDir):
   # get search data's name
   searchName = searchData['name']
+  print(f'Process search data: {searchName}')
 
   # add heading to home page for search data
   tocMd.write(searchDataHeadingDepth*"#" + " " + searchName + "\n")
@@ -70,7 +71,7 @@ def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideB
 
   # create a directory for the search data
   digestSearchDir = os.path.join(digestSearchDir, searchName)
-  os.mkdir(digestSearchDir)
+  make_dirs(digestSearchDir)
 
   # process page data, sort directories alphabetically
   pageDatas = searchData['pageData']
@@ -105,7 +106,9 @@ def write_page(dirPath, fileExts, dirDepth, dirsToExclude, inProject, tocUrl, ma
   pageName = pathlib.PurePath(dirPath).name
 
   # create markdown file
-  pageMd = open(os.path.realpath(os.path.join(digestSearchDir, pageName + '.md')), "w")
+  pagePath = os.path.realpath(os.path.join(digestSearchDir, pageName + '.md'))
+  pageMd = open(pagePath, "w")
+  print(f'Write page: {pageName} | path: {pagePath}')
 
   # write page content
   pageMd.write(f"[Back to Table of Contents]({tocUrl})\n\n")
@@ -172,8 +175,12 @@ def get_page_assets(dirPath, fileExts):
       assets[extension].append((item.name, item.path))
 
   # sort alphabetically by name
+  assetCount = 0
   for ext in fileExts:
     assets[ext].sort(key=lambda assetPath: pathlib.Path(assetPath[1]).stem, reverse=False)
+    assetCount += len(assets[ext])
+
+  print(f'Found {assetCount} in {dirPath}')
 
   return assets
 

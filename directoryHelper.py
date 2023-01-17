@@ -6,6 +6,7 @@ def make_dirs(path):
 
   if not os.path.exists(path):
     os.makedirs(path)
+    print(f'Created directory at: {path}')
 
 def human_readable_dir_size(path, decimalPlaces = 2):
   return human_readable_size(dir_size(path), decimalPlaces)
