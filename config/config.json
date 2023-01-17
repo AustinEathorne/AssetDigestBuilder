@@ -27,14 +27,7 @@
       "pageData": 
       [
         {
-          "directory": "ActorAnimations/Test",
-          "inProject": false,
-          "fileExtensions": [".gif"],
-          "directoryDepth": 1,
-          "directoriesToExclude": []
-        },
-        {
-          "directory": "ActorAnimations/Test2",
+          "directory": "ActorAnimations/Ava",
           "inProject": false,
           "fileExtensions": [".gif"],
           "directoryDepth": 1,

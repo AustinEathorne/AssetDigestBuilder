@@ -9,6 +9,8 @@ def generate_gifs(srcDir, dstDir):
     print(f"No images found to convert to gifs\n")
     return
 
+  print("Generate Gifs")
+
   # duration of each frame in milliseconds
   duration = (1.0/FPS)/0.001  
   
@@ -21,7 +23,7 @@ def generate_gifs(srcDir, dstDir):
           totalGifs += 1
 
   # create destination directory
-  print(f"Converting Images to Gifs\nOutput directory: {dstDir}")
+  print(f"Output directory: {dstDir}")
   make_dirs(dstDir)
 
   # traverse image directories, create gifs (Actor/SetType/Set/*.jpeg)
@@ -55,13 +57,14 @@ def generate_gifs(srcDir, dstDir):
 
         # create gif
         make_gif(animSet.path, animSetFilePath, duration)
+        print(f"Create Gif from assets at: {animSet.path}")
 
         # print progress
         createdGifs += 1
         completion = round((createdGifs/totalGifs) * 100, 2)
         print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})")
         
-  print("Gif Conversion Complete\n", end= "\r")
+  print("Gif Conversion Complete\n")
 
 def make_gif(imgSrc, gifDst, duration):
   # get all of the .jpg images in the set directory

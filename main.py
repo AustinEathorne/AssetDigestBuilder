@@ -42,7 +42,7 @@ def main():
   #print(f"Github Workspace: {githubWorkspace}")
 
   startTime = datetime.now()
-  print(f"\n[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n\n")
+  print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
   # build directory paths
   parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -58,6 +58,7 @@ def main():
   for directory in os.scandir(parentDirPath):
     if directory.is_dir():
       print(directory.name)
+  print('\n')
 
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:
@@ -78,7 +79,6 @@ def main():
   #wikiBranch = wikiRepo.get_branch(WIKI_REPO_WORKING_BRANCH)
 
   # generate gifs from animation capture images
-  print("Generate Gifs\n")
   gifSrcDir = os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_SRC_DIR))
   gifOutDir = os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_OUT_DIR))
   generate_gifs(gifSrcDir, gifOutDir)
