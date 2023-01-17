@@ -94,7 +94,7 @@ def main():
     wikiRepo.index.commit(f'Asset Digest Bump')
     wikiRepo.git.push()
   else:
-      print("No changes found in the Wiki repository")
+      print("No changes found in the Wiki repository... something went wrong ^")
       exit(1)
 
   # display complete message

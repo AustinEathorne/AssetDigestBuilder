@@ -6,14 +6,14 @@
       "pageData": 
       [
         {
-          "directory": "Images/Test/",
+          "directory": "Images/Test1",
           "inProject": true,
           "fileExtensions": [".png"],
           "directoryDepth": 0,
           "directoriesToExclude": []
         },
         {
-          "directory": "Image/Test2/",
+          "directory": "Image/Test2",
           "inProject": true,
           "fileExtensions": [".png"],
           "directoryDepth": 1,
