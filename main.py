@@ -8,72 +8,47 @@ from digestBuilder import generate_markdown_files
 # Workflow Environment Variable Names
 MAIN_DIR = "MAIN_DIR"
 WIKI_DIR = "WIKI_DIR"
-TOOLS_DIR = "TOOLS_DIR"
-GITHUB_TOKEN = "GITHUB_TOKEN"
-GITHUB_WORKSPACE = "GITHUB_WORKSPACE"
+GITHUB_SHA = "GITHUB_SHA" #SHA for the commit that triggered the Action (merged to master commit)
 
 # Gif Directory Paths (relative to the wiki root directory)
 # WikiRoot/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
 WIKI_GIF_SRC_DIR = os.path.realpath(os.path.join("Assets", "ImagesToConvert"))
 # WikiRoot/Assets/ActorAnimations/[ActorName]/[SetType]/[AnimSet].gif
-WIKI_GIF_OUT_DIR = os.path.realpath(os.path.join("Assets", "ActorAnimations"))
+WIKI_GIF_DST_DIR = os.path.realpath(os.path.join("Assets", "ActorAnimations"))
 
 
 def main():
-  #print("Run Asset Digest Builder")
+  startTime = datetime.now()
+  print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
-  # Get environment variables (defined in workflow yaml)
+  # get environment variables (defined in workflow yaml)
   if (mainDirName := get_environment_var(MAIN_DIR)) is None:
     exit(1)
   if (wikiDirName := get_environment_var(WIKI_DIR)) is None:
     exit(1)
-  if (toolsDirName := get_environment_var(TOOLS_DIR)) is None:
+  if (githubSha := get_environment_var(GITHUB_SHA)) is None:
     exit(1)
-  #if (githubWorkspace := get_environment_var(GITHUB_WORKSPACE)) is None:
-    #exit(1)
-  #print(f"Github Workspace: {githubWorkspace}")
-
-  startTime = datetime.now()
-  print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
   # build directory paths
   parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-  print(f"Parent Directory: {parentDirPath}")
   repoDirPath = os.path.realpath(os.path.join(parentDirPath, mainDirName))
-  print(f"Repo Directory: {repoDirPath}")
   wikiDirPath = os.path.realpath(os.path.join(parentDirPath, wikiDirName))
-  print(f"Wiki Directory: {wikiDirPath}")
-  toolsDirPath = os.path.realpath(os.path.join(parentDirPath, toolsDirName))
-  print(f"Tools Directory: {toolsDirPath}\n")
-
-  #print("Directories in Parent:")
-  #for directory in os.scandir(parentDirPath):
-  #  if directory.is_dir():
-  #    print(directory.name)
-  #print('\n')
 
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:
-    print('Failed to find wiki repository.\n')
+    print(f'Failed to find wiki directory repository at: {wikiDirPath}\n')
     exit(1)
 
   # get the wiki repository
   wikiRepo = git.Repo(wikiDirPath)
   if wikiRepo is None:
-    print(f'Failed to retrieve the wiki repository at {wikiDirPath}\n')
+    print(f'Failed to retrieve the wiki repository at: {wikiDirPath}\n')
     exit(1)
 
-  # create instance of Github class
-  #gh = Github(githubToken)
-
-  # get the wiki repo and branch
-  #wikiRepo = gh.get_repo(WIKI_REPO_NAME)
-  #wikiBranch = wikiRepo.get_branch(WIKI_REPO_WORKING_BRANCH)
-
   # generate gifs from animation capture images
-  gifSrcDir = os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_SRC_DIR))
-  gifOutDir = os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_OUT_DIR))
-  generate_gifs(gifSrcDir, gifOutDir)
+  generate_gifs(
+    os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_SRC_DIR)),
+    os.path.realpath(os.path.join(wikiDirPath, WIKI_GIF_DST_DIR)))
 
   # search the project for png assets and build markdown files
   generate_markdown_files(repoDirPath, wikiDirPath)
@@ -86,8 +61,8 @@ def main():
     wikiRepo.git.add(".") # add all local changes
 
   if wikiRepo.is_dirty():
-    print('Commit and Push Wiki Changes\n')
-    wikiRepo.index.commit('Asset Digest Bump')
+    print('Commit and push changes to the wiki repo\n')
+    wikiRepo.index.commit('-m', 'Asset Digest Bump', '-m', f'Rebuilt the Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
   else:
       print("No changes found in the Wiki repository... something went wrong ^\n")

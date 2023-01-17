@@ -17,7 +17,7 @@ ASSET_DISPLAY_SIZE_PERCENTAGE = 100
 
 
 def generate_markdown_files(mainDir, wikiDir):
-  print("Generating Markdown Files")
+  print("Markdown Generation Start")
 
   # load the config file
   with open(CONFIG_DIR, 'r') as f:
@@ -59,6 +59,8 @@ def generate_markdown_files(mainDir, wikiDir):
   # close files
   tocMd.close()
   sideBarMd.close()
+
+  print("Markdown Generation Complete\n")
 
 def process_search_data(searchData, tocUrl, searchDataHeadingDepth, tocMd, sideBarMd, mainDir, assetDir, digestDir, digestAssetDir, digestSearchDir):
   # get search data's name

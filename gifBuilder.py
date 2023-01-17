@@ -9,7 +9,7 @@ def generate_gifs(srcDir, dstDir):
     print(f"No images found to convert to gifs\n")
     return
 
-  print("Generate Gifs")
+  print("Gif Generation Start")
 
   # duration of each frame in milliseconds
   duration = (1.0/FPS)/0.001  
@@ -64,7 +64,7 @@ def generate_gifs(srcDir, dstDir):
         completion = round((createdGifs/totalGifs) * 100, 2)
         print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})")
         
-  print("Gif Conversion Complete\n")
+  print("Gif Generation Complete\n")
 
 def make_gif(imgSrc, gifDst, duration):
   # get all of the .jpg images in the set directory
