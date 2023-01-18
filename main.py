@@ -78,7 +78,7 @@ def generate_gifs_from_images(wikiDirPath, wikiRepo):
 
   # remove gif src files
   for file in os.scandir(gifSrcDir):
-    wikiRepo.git.rm(file)
+    wikiRepo.git.rm(file.path)
 
 def commit_and_push_changes(wikiRepo, githubSha):
   print('Update Wiki Repo')
