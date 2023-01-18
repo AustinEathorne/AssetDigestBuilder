@@ -92,19 +92,9 @@ def commit_and_push_changes(wikiRepo, githubSha):
   wikiRepo.git.add(".")
 
   # commit and push changes to the wiki repo
-  if wikiRepo.is_dirty(): 
-    print('\t Changes 0:')
-    print(wikiRepo.git.diff('--name-only'))
-
-    print('\t Changes 1:')
-    for file in wikiRepo.git.diff('--name-only').split():
-      print(f'\t\t{file}')
-    
-    print('\t Changes 2:')
-    print(textwrap.indent('\n'.join(wikiRepo.git.diff('--name-only').split()), '\t\t')) #TODO this prints nothing
-
-    wikiRepo.index.commit(f'Update Asset Digest based on commit: {githubSha}')
+  if wikiRepo.is_dirty():
     wikiRepo.git.push()
+    wikiRepo.index.commit(f'Updated Asset Digest based on commit: {githubSha}')
   else:
     print("\tNo changes found in the Wiki repository\n")
 
