@@ -1,4 +1,4 @@
-import pathlib, glob, os, shutil
+import pathlib, glob, os
 from PIL import Image
 from directoryHelper import make_dirs
 

@@ -16,6 +16,7 @@ WIKI_GIF_DST_DIR_NAME = "ActorAnimations"
 
 
 def main():
+  # display start message
   startTime = datetime.now()
   print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
@@ -27,11 +28,34 @@ def main():
   if (githubSha := get_environment_var(GITHUB_SHA)) is None:
     exit(1)
 
-  # build directory paths
+  # get directory paths and the wiki repo
+  repoDirPath, wikiDirPath = get_directory_paths(mainDirName, wikiDirName)
+  wikiRepo = get_wiki_repo(wikiDirPath)
+
+  # build digest, commit and push
+  generate_gifs_from_images(wikiDirPath, wikiRepo)
+  generate_markdown_files(repoDirPath, wikiDirPath)
+  commit_and_push_changes(wikiRepo, githubSha)
+
+  # display complete message
+  completeTime = datetime.now()
+  duration = (completeTime - startTime)
+  print(f"[{completeTime.strftime('%H:%M:%S')}] Digest Builder Complete | Duration: {duration}")
+
+def get_environment_var(varName):
+  var = os.environ.get(varName)
+  if var is None:
+    print(f"{varName} environment variable not set")
+
+  return var
+
+def get_directory_paths(mainDirName, wikiDirName):
   parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
   repoDirPath = os.path.realpath(os.path.join(parentDirPath, mainDirName))
   wikiDirPath = os.path.realpath(os.path.join(parentDirPath, wikiDirName))
+  return repoDirPath, wikiDirPath
 
+def get_wiki_repo(wikiDirPath):
   # check if wiki exists
   if os.path.exists(wikiDirPath) == False:
     print(f'Failed to find wiki directory repository at: {wikiDirPath}\n')
@@ -43,24 +67,29 @@ def main():
     print(f'Failed to retrieve the wiki repository at: {wikiDirPath}\n')
     exit(1)
 
+def generate_gifs_from_images(wikiDirPath, wikiRepo):
   # generate gifs from animation capture images
-  gifSrcDir = os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)
+  gifSrcDir = os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME))
   generate_gifs(
-    os.path.realpath(gifSrcDir),
+    gifSrcDir,
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
-  wikiRepo.git.rm(gifSrcDir) # remove gif src directory and all of its content recursively
 
-  # search the project for png assets and build markdown files
-  generate_markdown_files(repoDirPath, wikiDirPath)
+  # remove gif src files
+  for file in os.scandir(gifSrcDir):
+    wikiRepo.git.rm(file)
 
-  # commit and push changes to the wiki repo
+def commit_and_push_changes(wikiRepo, githubSha):
   print('Update Wiki Repo')
+
+  # print new files
   if wikiRepo.untracked_files:
     print('\tAdding the following files to git:')
     print(textwrap.indent('\n'.join([os.path.basename(file) for file in wikiRepo.untracked_files]), '\t\t'))
   
-  wikiRepo.git.add(".") # add all local changes
+  # add all local changes
+  wikiRepo.git.add(".")
 
+  # commit and push changes to the wiki repo
   if wikiRepo.is_dirty(): 
     print('\t Changes 0:')
     print(wikiRepo.git.diff('--name-only'))
@@ -76,18 +105,6 @@ def main():
     wikiRepo.git.push()
   else:
     print("\tNo changes found in the Wiki repository\n")
-
-  # display complete message
-  completeTime = datetime.now()
-  duration = (completeTime - startTime)
-  print(f"[{completeTime.strftime('%H:%M:%S')}] Digest Builder Complete | Duration: {duration}")
-
-def get_environment_var(varName):
-  var = os.environ.get(varName)
-  if var is None:
-    print(f"{varName} environment variable not set")
-
-  return var
 
 if __name__ == '__main__':
   main()
