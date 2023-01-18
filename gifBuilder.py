@@ -5,10 +5,6 @@ from directoryHelper import make_dirs
 FPS = 15
 
 def generate_gifs(srcDir, dstDir):
-  if not os.path.exists(srcDir):
-    print(f"No images found to convert to gifs\n")
-    return
-
   print("Gif Generation Start")
 
   # duration of each frame in milliseconds
