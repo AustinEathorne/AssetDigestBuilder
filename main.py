@@ -44,9 +44,11 @@ def main():
     exit(1)
 
   # generate gifs from animation capture images
+  gifSrcDir = os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)
   generate_gifs(
-    os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)),
+    os.path.realpath(gifSrcDir),
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
+  wikiRepo.git.rm(gifSrcDir) # remove gif src directory and all of its content recursively
 
   # search the project for png assets and build markdown files
   generate_markdown_files(repoDirPath, wikiDirPath)
@@ -59,12 +61,15 @@ def main():
   
   wikiRepo.git.add(".") # add all local changes
 
-  if wikiRepo.is_dirty():    
-    print('\t Changes:')
+  if wikiRepo.is_dirty(): 
+    print('\t Changes 0:')
+    print(wikiRepo.git.diff('--name-only'))
+
+    print('\t Changes 1:')
     for file in wikiRepo.git.diff('--name-only').split():
       print(f'\t\t{file}')
     
-    print('\t Changes:')
+    print('\t Changes 2:')
     print(textwrap.indent('\n'.join(wikiRepo.git.diff('--name-only').split()), '\t\t')) #TODO this prints nothing
 
     wikiRepo.index.commit(f'Update Asset Digest based on commit: {githubSha}')

@@ -62,7 +62,6 @@ def generate_gifs(srcDir, dstDir):
         completion = round((createdGifs/totalGifs) * 100, 2)
         print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})\r", end="")
         
-  shutil.rmtree(srcDir)
   print("Gif Generation Complete\n")
 
 def make_gif(imgSrc, gifDst, duration):
