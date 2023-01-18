@@ -59,8 +59,7 @@ def generate_gifs(srcDir, dstDir):
 
         # print progress
         createdGifs += 1
-        completion = round((createdGifs/totalGifs) * 100, 2)
-        print(f"Progress: {completion}{'%'} ({createdGifs}/{totalGifs})\r", end="")
+        print(f"\t[{createdGifs}/{totalGifs}] Created {animSetName}")
         
   print("Gif Generation Complete\n")
 
@@ -75,5 +74,3 @@ def make_gif(imgSrc, gifDst, duration):
   frame_one = frames[0]
   frame_one.save(gifDst,
     format="GIF", append_images=frames, save_all=True, duration=duration, loop=0)
-
-  print(f"\tCreated '{gifDst}'")
