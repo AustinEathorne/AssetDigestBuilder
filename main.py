@@ -67,6 +67,8 @@ def get_wiki_repo(wikiDirPath):
     print(f'Failed to retrieve the wiki repository at: {wikiDirPath}\n')
     exit(1)
 
+  return wikiRepo
+
 def generate_gifs_from_images(wikiDirPath, wikiRepo):
   # generate gifs from animation capture images
   gifSrcDir = os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME))
