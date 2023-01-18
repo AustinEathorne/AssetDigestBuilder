@@ -44,7 +44,6 @@ def main():
     exit(1)
 
   # generate gifs from animation capture images
-  #TODO: remove src dir
   generate_gifs(
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME)),
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
@@ -62,7 +61,11 @@ def main():
 
   if wikiRepo.is_dirty():    
     print('\t Changes:')
-    print(textwrap.indent('\n'.join(wikiRepo.git.diff('--name-only').split()), '\t\t'))
+    for file in wikiRepo.git.diff('--name-only').split():
+      print(f'\t\t{file}')
+    
+    print('\t Changes:')
+    print(textwrap.indent('\n'.join(wikiRepo.git.diff('--name-only').split()), '\t\t')) #TODO this prints nothing
 
     wikiRepo.index.commit(f'Update Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
