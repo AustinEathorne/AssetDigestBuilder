@@ -70,8 +70,13 @@ def get_wiki_repo(wikiDirPath):
   return wikiRepo
 
 def generate_gifs_from_images(wikiDirPath, wikiRepo):
-  # generate gifs from animation capture images
+  # check if there are images to convert
   gifSrcDir = os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_SRC_DIR_NAME))
+  if not os.path.exists(gifSrcDir):
+    print(f"No images found to convert to gifs\n")
+    return
+
+  # generate gifs from animation capture images
   generate_gifs(
     gifSrcDir,
     os.path.realpath(os.path.join(wikiDirPath, "AssetDigest", "Assets", WIKI_GIF_DST_DIR_NAME)))
