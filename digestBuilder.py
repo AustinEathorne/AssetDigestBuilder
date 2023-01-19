@@ -40,7 +40,7 @@ def generate_markdown_files(mainDir, wikiDir):
 
   # create ToC & sidebar markdown file
   tocMd = open(os.path.realpath(os.path.join(digestDir, 'AssetDigest' + '.md')), "w")
-  sideBarMd = open(os.path.realpath(os.path.join(digestDir, '_Sidebar' + '.md')), "w")
+  sideBarMd = open(os.path.realpath(os.path.join(wikiDir, '_Sidebar' + '.md')), "w")
 
   # build ToC page md url
   tocUrl = os.path.join(WIKI_URL, 'AssetDigest').replace('\\', '/')
