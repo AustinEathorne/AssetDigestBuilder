@@ -100,7 +100,7 @@ def commit_and_push_changes(wikiRepo, githubSha):
   if wikiRepo.is_dirty():
     wikiRepo.index.commit(f'Updated Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
-    print("\tChanges committed and pushed")
+    print("\tChanges committed and pushed\n")
   else:
     print("\tNo changes found in the Wiki repository\n")
 
