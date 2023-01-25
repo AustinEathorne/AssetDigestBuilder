@@ -30,7 +30,7 @@ def test():
 
   # get and print contents
   contents = get_contents(repo, "Assets/Images")
-  print_contents(contents)
+  print_contents(repo, contents)
   #wikiContents = get_contents(wikiRepo, "AssetDigest/Assets/")
   #print_contents(wikiContents)
 
@@ -52,9 +52,14 @@ def get_contents(repo, path):
 
   return contents
 
-def print_contents(contents):
+def print_contents(repo, contents):
   for file in contents:
-    print(f"Found: {file.name} | type: {file.type} | path: {file.path}\nURL: {file.html_url}\n")
+    print(f"Found: {file.name} | type: {file.type} | path: {file.path}\nURL: {file.html_url}")
+
+    if file.type == "dir":
+      print_contents(repo, get_contents(repo, file.path))
+    else:
+      print(' ')
 
 if __name__ == '__main__':
   test()
