@@ -17,22 +17,22 @@ def test():
   # initialize github class and get repos
   gh = Github(githubToken)
   repo = gh.get_repo(repoName)
-  wikiRepo = gh.get_repo(repoName + '/wiki')
+  #wikiRepo = gh.get_repo(repoName + '/wiki')
 
   # null check repos
   if repo is None:
     print(f"Failed to get the main repo with name {repoName}")
     exit(1)
 
-  if wikiRepo is None:
-    print(f"Failed to get the wiki repo with name {repoName}/wiki")
-    exit(1)
+  #if wikiRepo is None:
+  #  print(f"Failed to get the wiki repo with name {repoName}/wiki")
+  #  exit(1)
 
   # get and print contents
   contents = get_contents(repo, "Assets/Images")
   print_contents(contents)
-  wikiContents = get_contents(wikiRepo, "AssetDigest/Assets/")
-  print_contents(wikiContents)
+  #wikiContents = get_contents(wikiRepo, "AssetDigest/Assets/")
+  #print_contents(wikiContents)
 
   print("Test Complete")
 
@@ -54,10 +54,7 @@ def get_contents(repo, path):
 
 def print_contents(contents):
   for file in contents:
-    if file.type == "dir":
-      print(f"Found directory: {file.name} at {file.path}\nURL: {file.html_url}\n")
-    else:
-      print(f"Found file: {file.name} of type {file.type} at {file.path}\nURL: {file.html_url}\n")
+    print(f"Found: {file.name} | type: {file.type} | path: {file.path}\nURL: {file.html_url}\n")
 
 if __name__ == '__main__':
   test()
