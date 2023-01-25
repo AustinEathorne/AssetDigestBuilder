@@ -40,6 +40,8 @@ def get_environment_var(varName):
   var = os.environ.get(varName)
   if var is None:
     print(f"{varName} environment variable not set")
+  else:
+    print(f"Got environment var {varName}: {var}")
   return var
 
 def get_contents(repo, path):
