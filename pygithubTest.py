@@ -6,6 +6,8 @@ REPO_NAME = "REPO_NAME" # the name of the repo to operate on
 
 
 def test():
+  print("Run Test\n")
+
   # get environment variables
   if (githubToken := get_environment_var(GITHUB_TOKEN)) is None:
     exit(1)
@@ -32,7 +34,7 @@ def test():
   wikiContents = get_contents(wikiRepo, "AssetDigest/Assets/")
   print_contents(wikiContents)
 
-  return
+  print("Test Complete")
 
 def get_environment_var(varName):
   var = os.environ.get(varName)
@@ -55,5 +57,5 @@ def print_contents(contents):
     else:
       print(f"Found file: {file.name} of type {file.type} at {file.path}\nURL: {file.html_url}\n")
 
-if __name__ == '__pygithubTest__':
+if __name__ == '__main__':
   test()
