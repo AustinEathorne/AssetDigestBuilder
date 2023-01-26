@@ -107,28 +107,28 @@ def generate_gifs_from_images(wikiDirPath, wikiRepo):
     wikiRepo.git.rm("-r", file.path)
 
 def commit_and_push_changes(wikiRepo, githubSha):
-  print('Update Wiki Repo')
+  print('Wiki Repo Update Start')
 
-  # print new files
-  if wikiRepo.untracked_files:
-    print('\tAdding the following files to git:')
-    print(textwrap.indent('\n'.join([os.path.basename(file) for file in wikiRepo.untracked_files]), '\t\t'))
-  
   # add all local changes
   wikiRepo.git.add(".")
 
   # commit and push changes to the wiki repo
   if wikiRepo.is_dirty():
-    print('\tModifying the following tracked files:')
-    print(textwrap.indent('\n'.join([file for file in wikiRepo.index.diff('master')]), '\t\t'))
+    diff_list = wikiRepo.head.commit.diff()
+    print("\tCommitting changes:")
+    print(textwrap.indent(
+      '\n'.join([f"{diff.change_type}: {diff.b_path}" for diff in diff_list]), '\t\t'))
     
     wikiRepo.index.commit(f'Updated Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
-    print("\tChanges committed and pushed\n")
+    print("\tChanges committed and pushed")
   else:
-    print("\tNo changes found in the Wiki repository\n")
+    print("\tNo changes found in the Wiki repository")
+
+  print('Wiki Repo Update Complete')
 
 # test
+"""
 def get_contents(repo, path):
   contents = repo.get_contents(path)
   if contents is None or len(contents) == 0:
@@ -145,6 +145,7 @@ def print_contents(repo, contents):
       print_contents(repo, get_contents(repo, file.path))
     else:
       print(' ')
+"""
 
 if __name__ == '__main__':
   main()
