@@ -194,11 +194,12 @@ def get_page_assets_for_main(dirPath, fileExts, repo):
     print (f"\t\tFailed to find files in directory: '{dirPath}'")
     return assets
 
+  #print(f"File types found on github at: {dirPath}")
+
   # gather items of the specified file type in the directory
-  print(f"File types found on github at: {dirPath}")
   for file in files:
     # check file type ("dir" or "file")
-    print (f"Check: {file.name} | {file.type} | {file.path} | {file.html_url}")
+    #print (f"Check: {file.name} | {file.type} | {file.path} | {file.html_url}")
     if file.type == "dir":
       # call this method recursively to get assets within this directory
       #assets.update(get_page_assets_for_main(file.path, fileExts, repo))
@@ -212,7 +213,7 @@ def get_page_assets_for_main(dirPath, fileExts, repo):
       if extension in fileExts:
         # create image and determine dimensions
         image = Image.open(io.BytesIO(file.decoded_content))
-        print(f"Created Image from Repo: {file.name} | width: {image.size[0]} height: {image.size[1]}")
+        #print(f"Created Image from Repo: {file.name} | width: {image.size[0]} height: {image.size[1]}")
         if image.size[0] >= image.size[1]:
           width = ASSET_DISPLAY_SIZE_PERCENTAGE
           height = (image.size[1] * ASSET_DISPLAY_SIZE_PERCENTAGE)/image.size[0]
@@ -220,10 +221,12 @@ def get_page_assets_for_main(dirPath, fileExts, repo):
           width = (image.size[0] * ASSET_DISPLAY_SIZE_PERCENTAGE)/image.size[1]
           height = ASSET_DISPLAY_SIZE_PERCENTAGE
 
+        name = p.name.removesuffix(extension)
+
         # create ImageAsset and add it to the dictionary
         assets[extension].append(ImageAsset(
-          p.name,
-          get_abbreviated_asset_name(p.name),
+          name,
+          get_abbreviated_asset_name(name),
           file.html_url,
           width,
           height))
@@ -320,7 +323,7 @@ def get_page_assets_for_wiki(dirPath, fileExts, digestDir, digestUrl):
   for item in os.scandir(dirPath):
     extension = pathlib.Path(item.path).suffix.lower()
     if extension in fileExts:
-      name = item.name
+      name = item.name.removesuffix(extension)
       title = get_abbreviated_asset_name(name)
       githubUrl = item.path.replace(digestDir, digestUrl).replace('\\', '/').replace(' ', '%20')
 
