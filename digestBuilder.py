@@ -373,7 +373,8 @@ def write_images(images, pageMd):
     if assetCount % ASSET_COLUMN_COUNT == 1:
       pageMd.write("|")
 
-    pageMd.write(f" <a href={image.githubUrl}><img src={image.githubUrl} alt={image.name} title={image.name} {sizeString}></a> | {image.title} |")
+    name = image.name.replace(' ', '%20')
+    pageMd.write(f" <a href={image.githubUrl}><img src={image.githubUrl} alt={name} title={name} {sizeString}></a> | {image.title} |")
 
     if assetCount % ASSET_COLUMN_COUNT == 0:
       pageMd.write("\n")
