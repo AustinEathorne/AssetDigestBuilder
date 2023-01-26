@@ -2,11 +2,14 @@ import os
 
 def make_dirs(path, tabIndentation = 0):
   if path == "":
-    return
+    return False
 
   if not os.path.exists(path):
     os.makedirs(path)
     print(f"{'    ' * tabIndentation}Created directory at: {path}")
+    return True
+  
+  return False
 
 def human_readable_dir_size(path, decimalPlaces = 2):
   return human_readable_size(dir_size(path), decimalPlaces)

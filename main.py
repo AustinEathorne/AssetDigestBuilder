@@ -1,12 +1,16 @@
 import os, git, textwrap
+from github import Github
 from datetime import datetime
 from gifBuilder import generate_gifs
 from digestBuilder import generate_markdown_files
 
 # Workflow Environment Variable Names
-MAIN_DIR = "MAIN_DIR"
+#MAIN_DIR = "MAIN_DIR"
 WIKI_DIR = "WIKI_DIR"
+GITHUB_TOKEN = "GITHUB_TOKEN" # access token for the main repo
 GITHUB_SHA = "GITHUB_SHA" #SHA for the commit that triggered the Action (merged to master commit)
+REPO_NAME = "REPO_NAME" # the name of the repo to operate on
+CONFIG_PATH = "CONFIG_PATH" # path to the config file in the main repo
 
 # Gif Directory Paths (relative to the wiki root directory)
 # WikiRoot/AssetDigest/Assets/ImagesToConvert/[ActorName]/[SetType]/[AnimSet]/[n].png
@@ -21,20 +25,36 @@ def main():
   print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
   # get environment variables (defined in workflow yaml)
-  if (mainDirName := get_environment_var(MAIN_DIR)) is None:
-    exit(1)
+  #if (mainDirName := get_environment_var(MAIN_DIR)) is None:
+    #exit(1)
   if (wikiDirName := get_environment_var(WIKI_DIR)) is None:
+    exit(1)
+  if (githubToken := get_environment_var(GITHUB_TOKEN)) is None:
     exit(1)
   if (githubSha := get_environment_var(GITHUB_SHA)) is None:
     exit(1)
+  if (repoName := get_environment_var(REPO_NAME)) is None:
+    exit(1)
+  if (configPath := get_environment_var(CONFIG_PATH)) is None:
+    exit(1)
 
-  # get directory paths and the wiki repo
-  repoDirPath, wikiDirPath = get_directory_paths(mainDirName, wikiDirName)
+  # initialize github obj with access token
+  gh = Github(githubToken)
+
+  # get the main repo
+  repo = gh.get_repo(repoName) # OWNER/REPO_NAME format
+  if repo is None:
+    print(f"Failed to find the repo: {repoName}")
+    exit(1)
+  #content = repo.get_contents(path)
+
+  # get the wiki directory path and git repo
+  wikiDirPath = get_wiki_directory_path(repoName, wikiDirName)
   wikiRepo = get_wiki_repo(wikiDirPath)
 
-  # build digest, commit and push
+  # generate gifs, build digest, commit and push
   generate_gifs_from_images(wikiDirPath, wikiRepo)
-  generate_markdown_files(repoDirPath, wikiDirPath)
+  generate_markdown_files(repo, repoName, configPath, wikiDirPath)
   commit_and_push_changes(wikiRepo, githubSha)
 
   # display complete message
@@ -49,11 +69,10 @@ def get_environment_var(varName):
 
   return var
 
-def get_directory_paths(mainDirName, wikiDirName):
+def get_wiki_directory_path(wikiDirName):
   parentDirPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-  repoDirPath = os.path.realpath(os.path.join(parentDirPath, mainDirName))
   wikiDirPath = os.path.realpath(os.path.join(parentDirPath, wikiDirName))
-  return repoDirPath, wikiDirPath
+  return wikiDirPath
 
 def get_wiki_repo(wikiDirPath):
   # check if wiki exists
