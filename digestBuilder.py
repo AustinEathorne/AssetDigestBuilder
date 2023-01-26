@@ -28,7 +28,11 @@ def generate_markdown_files(repo, repoName, configPath, wikiDir):
   print("")
   print(configContent.decoded_content)
 
-  config = json.loads(configContent.content)
+  fixedConfig = configContent.decoded_content.replace(b"'", b'"')
+  print("")
+  print(fixedConfig)
+
+  config = json.loads(configContent.decoded_content)
 
   # create 'AssetDigest' folder in the wiki repo or clear the digest if necessary
   digestDir = os.path.realpath(os.path.join(wikiDir, "AssetDigest"))
