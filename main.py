@@ -49,7 +49,7 @@ def main():
   #content = repo.get_contents(path)
 
   # get the wiki directory path and git repo
-  wikiDirPath = get_wiki_directory_path(repoName, wikiDirName)
+  wikiDirPath = get_wiki_directory_path(wikiDirName)
   wikiRepo = get_wiki_repo(wikiDirPath)
 
   # generate gifs, build digest, commit and push

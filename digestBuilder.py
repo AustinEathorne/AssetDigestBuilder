@@ -18,8 +18,9 @@ def generate_markdown_files(repo, repoName, configPath, wikiDir):
   digestUrl = wikiUrl + 'AssetDigest'
 
   # load config file from the main repo
-  configContent = repo.get_file_contents(configPath)
-  if configContent is None or configContent.type is not "file":
+  print(f"Looking for config at {configPath}")
+  configContent = repo.get_contents(configPath)
+  if configContent is None or configContent.type != "file":
     print(f"Failed to find config at: {configPath}")
     exit(1)
   config = json.loads(configContent.content)
