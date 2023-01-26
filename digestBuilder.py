@@ -1,7 +1,5 @@
 import json, os, pathlib, shutil, io
 from PIL import Image
-#from github import Github
-#from urllib.parse import urljoin
 from directoryHelper import make_dirs
 from imageAsset import ImageAsset
 
@@ -18,10 +16,10 @@ def generate_markdown_files(repo, repoName, configPath, wikiDir):
   digestUrl = wikiUrl + 'AssetDigest'
 
   # load config file from the main repo
-  print(f"Looking for config at {configPath}")
+  print(f"\tLooking for config at {configPath}")
   configContent = repo.get_contents(configPath)
   if configContent is None or configContent.type != "file":
-    print(f"Failed to find config at: {configPath}")
+    print(f"\tFailed to find config at: {configPath}")
     exit(1)
 
   config = json.loads(configContent.decoded_content)
@@ -107,7 +105,7 @@ def process_search_data(searchData, searchDataHeadingDepth, tocMd, sideBarMd,
 
     # write page md and add a link to it in the ToC
     if inProject:
-      page = write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestRootDir, digestMarkdownDir, repo, wikiUrl, digestUrl)
+      page = write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestMarkdownDir, repo, wikiUrl, digestUrl)
     else:
       page = write_page_for_wiki(dirPath, dirDepth, dirsToExclude, fileExts, digestRootDir, digestMarkdownDir, wikiUrl, digestUrl)
 
@@ -120,12 +118,12 @@ def process_search_data(searchData, searchDataHeadingDepth, tocMd, sideBarMd,
   # process child search data 
   searchDataHeadingDepth += 2
   for sd in searchData['searchData']:
-    process_search_data(sd, searchDataHeadingDepth, tocMd, sideBarMd, 
+    process_search_data(sd, searchDataHeadingDepth, tocMd, sideBarMd,
       mainAssetDir, mainUrl, wikiUrl,
       digestRootDir, digestAssetDir, digestMarkdownDir, digestUrl)
 
 # main repo methods
-def write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestDir, digestMarkdownDir, repo, wikiUrl, digestUrl):
+def write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestMarkdownDir, repo, wikiUrl, digestUrl):
   # get nice name
   pageName = pathlib.PurePath(dirPath).name
 

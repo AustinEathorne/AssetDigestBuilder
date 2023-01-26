@@ -25,8 +25,6 @@ def main():
   print(f"[{startTime.strftime('%H:%M:%S')}] Digest Builder Start\n")
 
   # get environment variables (defined in workflow yaml)
-  #if (mainDirName := get_environment_var(MAIN_DIR)) is None:
-    #exit(1)
   if (wikiDirName := get_environment_var(WIKI_DIR)) is None:
     exit(1)
   if (githubToken := get_environment_var(GITHUB_TOKEN)) is None:
@@ -121,6 +119,9 @@ def commit_and_push_changes(wikiRepo, githubSha):
 
   # commit and push changes to the wiki repo
   if wikiRepo.is_dirty():
+    print('\tModifying the following tracked files:')
+    print(textwrap.indent('\n'.join([os.path.basename(file) for file in wikiRepo.index.diff(None)]), '\t\t'))
+    
     wikiRepo.index.commit(f'Updated Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
     print("\tChanges committed and pushed\n")
