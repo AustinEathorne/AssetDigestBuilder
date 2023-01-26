@@ -24,14 +24,6 @@ def generate_markdown_files(repo, repoName, configPath, wikiDir):
     print(f"Failed to find config at: {configPath}")
     exit(1)
 
-  print(configContent.content)
-  print("")
-  print(configContent.decoded_content)
-
-  fixedConfig = configContent.decoded_content.replace(b"'", b'"')
-  print("")
-  print(fixedConfig)
-
   config = json.loads(configContent.decoded_content)
 
   # create 'AssetDigest' folder in the wiki repo or clear the digest if necessary
@@ -97,21 +89,25 @@ def process_search_data(searchData, searchDataHeadingDepth, tocMd, sideBarMd,
     if inProject:
       # path is relative to the project's root - Assets/[directory]
       dirPath = f"{mainAssetDir}/{pageData['directory']}"
+      #check if directory exists
+      if not does_repo_file_exist("dir", dirPath, repo):
+        print(f"\t\tFailed to find directory: {dirPath}")
+        continue
     else:
       # path is absolute
       dirPath = os.path.realpath(os.path.join(digestAssetDir, pageData['directory']))
+      # check if directory exists
+      if not os.path.exists(dirPath):
+        print(f"\t\tFailed to find directory: {dirPath}")
+        continue
 
     fileExts = pageData['fileExtensions']
     dirDepth = pageData['directoryDepth']
     dirsToExclude = pageData['directoriesToExclude']
 
-    if not os.path.exists(dirPath):
-      print(f"\t\tFailed to find directory: {dirPath}")
-      continue
-
     # write page md and add a link to it in the ToC
     if inProject:
-      page = write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestRootDir, repo, wikiUrl, digestUrl)
+      page = write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestRootDir, digestMarkdownDir, repo, wikiUrl, digestUrl)
     else:
       page = write_page_for_wiki(dirPath, dirDepth, dirsToExclude, fileExts, digestRootDir, digestMarkdownDir, wikiUrl, digestUrl)
 
@@ -142,7 +138,7 @@ def write_page_for_main(dirPath, dirDepth, dirsToExclude, fileExts, digestDir, d
   pageMd.write(f"[Back to Table of Contents]({digestUrl})\n\n")
 
   # write page assets
-  write_page_assets(get_page_assets_for_main(dirPath, fileExts, digestDir), pageMd)
+  write_page_assets(get_page_assets_for_main(dirPath, fileExts, repo), pageMd)
     
   # create sections for all directories found in this directory that aren't excluded
   if dirDepth > 0:
@@ -215,7 +211,7 @@ def get_page_assets_for_main(dirPath, fileExts, repo):
       # check if we're looking for this file extension
       if extension in fileExts:
         # create image and determine dimensions
-        image = Image.open(io.StringIO(file.decoded_content))
+        image = Image.open(io.BytesIO(file.decoded_content))
         print(f"Created Image from Repo: {file.name} | width: {image.size[0]} height: {image.size[1]}")
         if image.size[0] >= image.size[1]:
           width = ASSET_DISPLAY_SIZE_PERCENTAGE
@@ -241,6 +237,18 @@ def get_page_assets_for_main(dirPath, fileExts, repo):
   print(f'\t\t\tFound {assetCount} assets in {dirPath}')
 
   return assets
+
+def does_repo_file_exist(fileType, path, repo):
+  contents = repo.get_contents("")
+  while contents:
+    fileContent = contents.pop(0)
+    if fileContent.type == fileType and fileContent.path == path:
+      return True
+
+    if fileContent.type == "dir":
+      contents.extend(repo.get_contents(fileContent.path))
+
+  return False
 
 # wiki repo methods
 def write_page_for_wiki(dirPath, dirDepth, dirsToExclude, fileExts, digestDir, digestMarkdownDir, wikiUrl, digestUrl):
@@ -312,7 +320,7 @@ def get_page_assets_for_wiki(dirPath, fileExts, digestDir, digestUrl):
   for item in os.scandir(dirPath):
     extension = pathlib.Path(item.path).suffix.lower()
     if extension in fileExts:
-      name = item.name.replace(extension)
+      name = item.name
       title = get_abbreviated_asset_name(name)
       githubUrl = item.path.replace(digestDir, digestUrl).replace('\\', '/').replace(' ', '%20')
 
