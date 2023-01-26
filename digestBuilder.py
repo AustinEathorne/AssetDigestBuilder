@@ -23,6 +23,11 @@ def generate_markdown_files(repo, repoName, configPath, wikiDir):
   if configContent is None or configContent.type != "file":
     print(f"Failed to find config at: {configPath}")
     exit(1)
+
+  print(configContent.content)
+  print("")
+  print(configContent.decoded_content)
+
   config = json.loads(configContent.content)
 
   # create 'AssetDigest' folder in the wiki repo or clear the digest if necessary

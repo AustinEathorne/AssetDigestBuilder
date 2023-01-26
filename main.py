@@ -46,7 +46,11 @@ def main():
   if repo is None:
     print(f"Failed to find the repo: {repoName}")
     exit(1)
-  #content = repo.get_contents(path)
+
+  # get and print contents
+  #contents = get_contents(repo, "")
+  #print_contents(repo, contents)
+  #return
 
   # get the wiki directory path and git repo
   wikiDirPath = get_wiki_directory_path(wikiDirName)
@@ -122,6 +126,24 @@ def commit_and_push_changes(wikiRepo, githubSha):
     print("\tChanges committed and pushed\n")
   else:
     print("\tNo changes found in the Wiki repository\n")
+
+# test
+def get_contents(repo, path):
+  contents = repo.get_contents(path)
+  if contents is None or len(contents) == 0:
+    print(f"Failed to get contents in the main repo at {path}")
+    exit(1)
+
+  return contents
+
+def print_contents(repo, contents):
+  for file in contents:
+    print(f"Found: {file.name} | type: {file.type} | path: {file.path}\nURL: {file.html_url}")
+
+    if file.type == "dir":
+      print_contents(repo, get_contents(repo, file.path))
+    else:
+      print(' ')
 
 if __name__ == '__main__':
   main()
