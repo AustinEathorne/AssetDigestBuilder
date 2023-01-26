@@ -120,7 +120,7 @@ def commit_and_push_changes(wikiRepo, githubSha):
   # commit and push changes to the wiki repo
   if wikiRepo.is_dirty():
     print('\tModifying the following tracked files:')
-    print(textwrap.indent('\n'.join([os.path.basename(file) for file in wikiRepo.index.diff(None)]), '\t\t'))
+    print(textwrap.indent('\n'.join([file for file in wikiRepo.index.diff('master')]), '\t\t'))
     
     wikiRepo.index.commit(f'Updated Asset Digest based on commit: {githubSha}')
     wikiRepo.git.push()
